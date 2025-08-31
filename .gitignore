@@ -1,0 +1,23 @@
+# Terraform
+terraform-deployment/.terraform/
+terraform-deployment/*.tfstate
+terraform-deployment/*.tfstate.*
+terraform-deployment/inventory.json
+terraform_output.json
+
+# Ansible sensitive
+ansible-provisioning/vault_password.txt
+
+# SSH keys
+**/redmine-key2.pem
+
+# macOS system files
+.DS_Store
+__MACOSX/
+
+# VSCode local config
+.vscode/
+
+# Python bytecode
+__pycache__/
+*.pyc

@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  redmine:
+    image: redmine:5.1
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      REDMINE_DB_POSTGRES: redminedb.c3mk2a2gmfsa.eu-west-3.rds.amazonaws.com
+      REDMINE_DB_DATABASE: redminedb
+      REDMINE_DB_USERNAME: admin_redmine
+      REDMINE_DB_PASSWORD: Shikan244
+      REDMINE_SECRET_KEY_BASE: c20f0f4a552cbac57294649511fa6e7a9d0d290d8368a4dec0ec0fdd5a61a35854d3c8d66d5591b66a59ce34c90ddf785ee030ed55765d46f306c6215aa9d631
+
+    volumes:
+      - /opt/redmine/files:/usr/src/redmine/files
+      - /opt/redmine/config/database.yml:/usr/src/redmine/config/database.yml
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    restart: always
+    ports:
+      - "9100:9100"

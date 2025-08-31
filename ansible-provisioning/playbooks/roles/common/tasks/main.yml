@@ -1,0 +1,36 @@
+# ansible/playbooks/roles/common/tasks/main.yml
+
+- name: Update apt packages
+  apt:
+    update_cache: yes
+    upgrade: dist
+  become: yes
+
+- name: Install required packages
+  apt:
+    name: [ "curl", "git" ]
+    state: present
+  become: yes
+
+- name: Install Docker using official convenience script
+  shell: |
+    curl -fsSL https://get.docker.com -o get-docker.sh
+    sh get-docker.sh
+  args:
+    creates: /usr/bin/docker
+  become: yes
+
+- name: Ensure Docker service is started
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
+  become: yes
+
+- name: Install Docker Compose
+  shell: |
+    curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
+  args:
+    executable: /bin/bash
+  become: true

@@ -1,0 +1,107 @@
+- name: Create Prometheus data directory
+  file:
+    path: /opt/prometheus/data
+    state: directory
+    owner: 472
+    group: 472
+    mode: '0755'
+  become: yes
+
+- name: Create Prometheus config directory
+  file:
+    path: /opt/prometheus
+    state: directory
+    owner: 472
+    group: 472
+    mode: '0755'
+  become: yes
+
+- name: Copy Prometheus configuration file
+  copy:
+    dest: /opt/prometheus/prometheus.yml
+    content: |
+      global:
+        scrape_interval: 15s
+      scrape_configs:
+        - job_name: 'node-exporter'
+          static_configs:
+            - targets: ['10.0.3.232:9100', '10.0.2.226:9100']
+  become: yes
+
+- name: Copy docker-compose.yml to monitoring instance
+  copy:
+    src: files/docker-compose.yml
+    dest: /opt/prometheus/docker-compose.yml
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+
+
+- name: Launch Monitoring stack via Docker Compose
+  shell: docker-compose -f /opt/prometheus/docker-compose.yml up -d
+  args:
+    chdir: /opt/prometheus
+  become: true
+
+- name: Create Grafana provisioning directory structure
+  file:
+    path: /opt/grafana/provisioning/dashboards
+    state: directory
+    owner: 472
+    group: 472
+    mode: '0755'
+  become: yes
+
+- name: Create Grafana dashboards directory
+  file:
+    path: /opt/grafana/dashboards
+    state: directory
+    owner: 472
+    group: 472
+    mode: '0755'
+  become: yes
+
+- name: Copy Grafana provisioning config
+  copy:
+    dest: /opt/grafana/provisioning/dashboards/redmine-provisioning.yml
+    content: |
+      apiVersion: 1
+      providers:
+        - name: 'Redmine Observability'
+          orgId: 1
+          folder: ''
+          type: file
+          disableDeletion: false
+          allowUiUpdates: true
+          options:
+            path: /var/lib/grafana/dashboards
+    owner: 472
+    group: 472
+    mode: '0644'
+  become: yes
+
+- name: Copy Grafana dashboard JSON file to dashboards directory
+  copy:
+    src: files/redmine_full_observability.json
+    dest: /opt/grafana/dashboards/redmine_full_observability.json
+    owner: 472
+    group: 472
+    mode: '0644'
+  become: yes
+
+- name: Create Grafana data directory
+  file:
+    path: /opt/grafana
+    state: directory
+    owner: 472
+    group: 472
+    mode: '0755'
+  become: yes
+
+- name: Copy Grafana dashboard JSON file
+  copy:
+    src: files/redmine_full_observability.json
+    dest: /tmp/redmine_full_observability.json
+    mode: '0644'
+  become: true

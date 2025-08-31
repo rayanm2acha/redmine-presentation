@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  redmine:
+    image: redmine:5.1
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      REDMINE_DB_POSTGRES: {{ redmine_db_host }}
+      REDMINE_DB_DATABASE: {{ redmine_db_name }}
+      REDMINE_DB_USERNAME: {{ redmine_db_user }}
+      REDMINE_DB_PASSWORD: {{ redmine_db_password }}
+      REDMINE_SECRET_KEY_BASE: {{ redmine_secret_key }}
+    volumes:
+      - /opt/redmine/files:/usr/src/redmine/files
+      - /opt/redmine/config/database.yml:/usr/src/redmine/config/database.yml
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    restart: always
+    ports:
+      - "9100:9100"

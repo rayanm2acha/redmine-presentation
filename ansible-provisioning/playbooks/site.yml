@@ -1,0 +1,17 @@
+- name: Common preparation on all instances
+  hosts: all
+  become: yes
+  roles:
+    - common
+
+- name: Deploy Redmine on redmine instance
+  hosts: redmine
+  become: yes
+  roles:
+    - redmine
+
+- name: Deploy monitoring stack on monitoring instance
+  hosts: monitoring
+  become: yes
+  roles:
+    - monitoring
