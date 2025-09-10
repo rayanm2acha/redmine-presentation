@@ -3,6 +3,8 @@
 This project demonstrates the **end-to-end deployment of Redmine** with a fully monitored and reproducible infrastructure.  
 It was built as a professional DevOps case study to showcase **Infrastructure as Code (IaC)**, **automation with Ansible**, and **observability with Prometheus/Grafana**.
 
+![Screenshot 2025-09-10 at 14 54 34](https://github.com/user-attachments/assets/8eb2e5da-fead-46ad-ad09-5acfcfac5188)
+
 ---
 
 ## 📌 Features
